@@ -19,7 +19,7 @@ let framesCount = 0, speed = 180, score = 0, lives = 3
 
 // 0: Main screen; 1: Playing; 2: Lost live; 3: Game Over
 let state = 0
-let upSpeedAt = 1000; // The speed increase every 1000 points.
+let upSpeedAt = 500; // The speed increase every 1000 points.
 
 /**
  * The main function
