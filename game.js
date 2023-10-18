@@ -69,13 +69,14 @@ async function doFrame() {
     qx.print("Controls:\n  Z or 'A' button\n  to shoot.");
     if(qx.keyp('ButtonA') || qx.keyp('z')) state = 1
   } else if (state == 1) {
-    drawPlayer();
+    drawPlayer()
     drawBlocks()
 
     // Draw cursor
     qx.color(3);
     qx.spr(0xc2, OFFSET_X + (cursor.pos * 8), OFFSET_Y + cursor.y);
 
+    // Draw live indicators
     let heartX = 23 * 8;
     for (let i = 1; i <= 3; i++) {
       qx.color(10)
@@ -84,6 +85,7 @@ async function doFrame() {
       heartX += 8
     }
 
+    // Check if 
     if (blocks.length == 15) {
       state = 2;
       lives -= 1;
@@ -95,6 +97,8 @@ async function doFrame() {
     qx.spr(0xc5, OFFSET_X + (player.pos * 8), player.y * 8)
     qx.locate(16, 7);
     qx.print("YOU DIE\nWait");
+
+    // Wait 5 seconds after lose life
     await qxa.wait(5)
     reset()
   } else if (state == 3) {
@@ -122,12 +126,15 @@ function drawPlayer() {
     player.pos = candX;
     cursor.pos = candX;
     if(qx.keyp('ButtonA') || qx.keyp('z')) shot()
-  } else if (state == 2 && (qx.keyp('ButtonA') || qx.keyp('z')) ) reset()
+  }
 
   qx.color(12);
   qx.spr(0xc0, OFFSET_X + (player.pos * 8), player.y * 8);
 }
 
+/**
+ * Draw the snakes
+ */
 function drawBlocks() {
   let y = OFFSET_Y + ((blocks.length - 1) * 8)
 
@@ -142,6 +149,10 @@ function drawBlocks() {
   })
 }
 
+/**
+ * This function checks and returns the row to which the cursor or a new snake can be moved.
+ * @returns {*} False if there are no rows or row number
+ */
 function checkPosition() {
   let v = 0;
   
@@ -164,6 +175,9 @@ function checkPosition() {
   return v;
 }
 
+/**
+ * Change the cursor position
+ */
 function setCursorPos() {
   let cp = checkPosition();
   if (typeof cp === 'number') {
